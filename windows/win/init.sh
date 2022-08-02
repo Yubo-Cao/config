@@ -3,9 +3,9 @@ source ./base.sh
 source ./devices.sh
 
 WIN_ISO="$(pwd)/win.iso"
-ensure "$WIN_ISO" "https://www.microsoft.com/software-download/windows11"
+# ensure "$WIN_ISO" "https://www.microsoft.com/software-download/windows11"
 VIRTIO_ISO="$(pwd)/virtio-win.iso"
-ensure "$VIRTIO_ISO" "https://github.com/virtio-win/virtio-win-pkg-scripts/blob/master/README.md"
+# ensure "$VIRTIO_ISO" "https://github.com/virtio-win/virtio-win-pkg-scripts/blob/master/README.md"
 
 sudo umount /efi
 sudo losetup --show -f ./mbr.bin
