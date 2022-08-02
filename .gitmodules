@@ -1,0 +1,19 @@
+[submodule "dotbot"]
+	path = dotbot
+	url = https://github.com/anishathalye/dotbot
+	ignore = dirty
+[submodule "dotbot-yay"]
+	path = dotbot-yay
+	url = https://github.com/oxson/dotbot-yay
+[submodule "/home/yubo/config/zsh/themes/powerlevel10k"]
+	path = shell/zsh/themes/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k.git
+[submodule "windows/vmware/vmware-host-modules"]
+	path = windows/vmware/vmware-host-modules
+	url = https://github.com/mkubecek/vmware-host-modules.git
+[submodule "shell/zsh/plugins/zsh-autosuggestions"]
+	path = shell/zsh/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "shell/zsh/plugins/zsh-syntax-highlighting"]
+	path = shell/zsh/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git

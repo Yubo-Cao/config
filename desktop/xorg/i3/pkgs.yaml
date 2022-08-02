@@ -1,0 +1,13 @@
+- xorg:
+  - xorg-xinit
+- i3:
+  - i3-gaps
+  - i3-wm
+  - i3status
+  - i3blocks
+  - i3lock
+  - xss-lock
+- screenshot:
+  - maim
+- red:
+  - redshift

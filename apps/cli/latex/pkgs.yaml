@@ -1,0 +1,12 @@
+- texlive:
+    - texlive-bin
+    - texlive-core
+    - texlive-latexextra
+    - texlive-langchinese
+    - texlive-bibtexextra
+    - tllocalmgr-git
+- latexindent:
+    - perl-yaml-tiny
+    - perl-file-homedir
+- pgfplots:
+    - latex-pgfplots

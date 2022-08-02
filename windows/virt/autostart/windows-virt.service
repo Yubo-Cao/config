@@ -1,0 +1,13 @@
+[Unit]
+Description='Windows Virtual Machine Controller'
+After=network.target libvirtd.service
+
+[Service]
+ExecStart=/usr/bin/zsh /home/yubo/config/virt/autostart/windows_virt start
+ExecStop=/usr/bin/zsh /home/yubo/config/virt/autostart/windows_virt start
+ExecReload=/usr/bin/zsh /home/yubo/config/virt/autostart/windows_virt start
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
+

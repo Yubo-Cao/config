@@ -1,0 +1,51 @@
+#!/usr/bin/zsh
+
+if [ $# != 1 ]; then
+    echo 'Require at least one argument, start/stop/reload'
+    exit 1
+fi
+
+GVT='/home/yubo/config/virt/gvt/intel_gvt.py'
+TIMEOUT=10
+LOG='/home/yubo/config/virt/autostart/autostart.log'
+GUESTNAME='windows'
+
+if [ ! -e $LOG ]; then
+    touch $LOG
+fi
+
+if [ "$(du -k autostart.log | cut -f 1)" -ge 1024 ]; then
+    rm -f $LOG
+fi
+
+function start() {
+    timeout $TIMEOUT python $GVT --create &>>$LOG
+    timeout $TIMEOUT virsh start $GUESTNAME &>>$LOG
+}
+
+function stop() {
+    timeout $TIMEOUT virsh shutdown $GUESTNAME &>>$LOG
+    if [ ! -z "$(sudo virsh list --state-running | rg $GUESTNAME)" ]; then
+        timeout $TIMEOUT virsh destroy $GUESTNAME &>>$LOG
+        echo 'attempt to force stop' >>$LOG
+    fi
+    timeout $TIMEOUT python $GVT --destroy &>>$LOG
+}
+
+function reload() {
+    stop
+    start
+}
+
+for arg in $@; do
+    if [ $arg = 'start' ]; then
+        start
+    elif [ $arg = 'stop' ]; then
+        stop
+    elif [ $arg = 'reload' ]; then
+        reload
+    else
+        echo "Illegal argument $arg"
+        exit 1
+    fi
+done

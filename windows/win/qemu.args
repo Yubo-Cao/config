@@ -1,0 +1,21 @@
+-machine q35,smm=on
+-accel kvm
+-device intel-iommu
+-global driver=cfi.pflash01,property=secure,value=on
+-global ICH9-LPC.disable_s3=1
+-drive if=pflash,format=raw,unit=0,readonly=on,file=/usr/share/edk2-ovmf/x64/OVMF_CODE.secboot.fd
+-drive if=pflash,format=raw,unit=1,readonly=on,file=/usr/share/edk2-ovmf/x64/OVMF_VARS.fd
+-device tpm-tis,tpmdev=tpm0
+-tpmdev passthrough,id=tpm0,path=/dev/tpm0,cancel-path=/home/yubo/config/win/fake-cancel
+-cpu host
+-smp 4,cores=4
+-m 8192
+-vga std
+-D log.txt
+-rtc base=localtime
+-drive file="$DISK",format=raw,media=disk
+-usb -device usb-tablet
+-device virtio-net,netdev=nd0,mac=52:55:00:d1:55:01
+-netdev tap,id=nd0,br=winbr,helper=/usr/lib/qemu/qemu-bridge-helper,vhost=on
+
+

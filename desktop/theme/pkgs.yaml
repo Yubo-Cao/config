@@ -1,0 +1,8 @@
+- materia_kde:
+    - materia-kde
+    - kvantum-theme-materia
+    - qt5ct
+- materia_gtk:
+    - nwg-look-bin
+    - materia-gtk-theme
+- papirus-icon-theme

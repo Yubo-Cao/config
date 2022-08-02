@@ -1,0 +1,115 @@
+- defaults:
+    link:
+      create: true
+- clean:
+    ~/:
+      force: true
+    ~/.config:
+      force: true
+      recursive: true
+- link:
+    ~/.bash_profile: shell/bash/bash_profile
+    ~/.bashrc: shell/bash/bashrc
+    ~/.bash_logout: shell/bash/bash_logout
+    ~/.config/kitty/kitty.conf: shell/kitty/kitty.conf
+    ~/.config/sway/:
+      glob: true
+      path: desktop/wayland/sway/*
+    ~/.config/waybar/config:
+      path: desktop/wayland/waybar/config.json
+    ~/.config/waybar/style.css:
+      path: desktop/wayland/waybar/style.css
+    ~/.local/share/rofi/themes/nord.rasi:
+      path: desktop/rofi/nord.rasi
+    ~/.config/rofi/config.rasi:
+      path: desktop/rofi/config.rasi
+      # ~/.config/electron-flags.conf:
+      # path: desktop/wayland/electron-flags.conf
+    ~/.config/zathura/zathurac:
+      path: apps/gui/zathura/zathurarc
+    ~/indentconfig.yaml:
+      path: apps/cli/latex/indentconfig.yaml
+    ~/.zshrc:
+      path: shell/zsh/zshrc
+    ~/.p10k.zsh:
+      path: shell/zsh/p10k.zsh
+    ~/.config/gtk-3.0/settings.ini:
+      path: desktop/theme/gtk/settings.ini
+    ~/.gtkrc-2.0:
+      path: desktop/theme/gtk/gtkrc-2.0
+    ~/.icons/default/index.theme:
+      path: desktop/theme/gtk/index.theme
+    ~/.config/xsettingsd/xsettingsd.conf:
+      path: desktop/theme/gtk/xsettingsd.conf
+    ~/.config/fcitx5:
+      glob: true
+      path: desktop/fcitx5/*
+      exclude: env
+    ~/.vim/autoload/plug.vim:
+      path: shell/vim/plug.vim
+    ~/.vimrc:
+      path: shell/vim/vimrc
+    ~/.xinitrc:
+      path: desktop/xorg/i3/xinitrc
+    ~/.config/rclone/rclone.conf:
+      path: apps/cli/rclone/rclone.conf
+    ~/.config/Typora/themes/fluent.css:
+      path: apps/gui/typora/fluent.css
+    ~/.config/i3/config:
+      path: desktop/xorg/i3/config
+    ~/.config/polybar/:
+      glob: true
+      path: desktop/xorg/polybar/*
+    ~/.config/picom.conf:
+      path: desktop/xorg/picom/picom.conf
+    ~/.config/dunst/dunstrc:
+      path: desktop/xorg/dunst/dunstrc
+- shell:
+    - command: zsh env; 
+      description: "Environment File Generator"
+    - command: for pkg in $(fd pkgs.yaml); do sudo python ./plugin/package.py $pkg; done;
+      stdout: true
+      description: "Install pkgs.yaml in subfolders"
+- package:
+    - ide:
+        - visual-studio-code-bin
+        - jetbrains-toolbox
+    - java:
+        - openjdk-src
+        - openjdk-doc
+        - jdk-openjdk
+    - rust-cli:
+        - fd
+        - ripgrep
+    - decompresser:
+        - ark
+        - unrar
+        - unarchiver
+        - lzop
+        - lrzip
+    - notebook:
+        - xmind
+        - typora-free
+    - common:
+        - dolphin # File Explorer
+        - gwenview # Image Viewer
+        - ntfs-3g
+    - devel:
+        - tldr
+        - git
+    - backup:
+        - snapper
+        - grub-btrfs
+    - obs-studio
+    - xdg-desktop-portal-wlr
+    - screenkey
+    - woeusb-ng
+    - ffmpeg
+    - inkscape
+    - krita
+    - gimp
+    - musescore
+    - blender
+    - discord
+    - rofi
+    - network-manager-applet

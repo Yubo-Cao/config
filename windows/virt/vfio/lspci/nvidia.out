@@ -1,0 +1,4 @@
+01:00.0 3D controller [0302]: NVIDIA Corporation GP107M [GeForce MX350] [10de:1c94] (rev a1)
+	Subsystem: Device [1b50:5518]
+	Kernel driver in use: nouveau
+	Kernel modules: nouveau

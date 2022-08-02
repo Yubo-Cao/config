@@ -1,0 +1,12 @@
+[Unit]
+Description=Rclone Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rclone mount personal:/ /home/yubo/personal --default-permissions --allow-other --transfers 4 --buffer-size 32M --low-level-retries 200 --config /home/yubo/config/rclone/rclone.conf 
+Restart=on-abort
+User=yubo
+
+[Install]
+WantedBy=multi-user.target

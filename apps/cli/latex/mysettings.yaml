@@ -1,0 +1,9 @@
+defaultIndent: "  "
+modifyLineBreaks:
+  textWrapOptions:
+    columns: 78
+verbatimEnvironments:
+  minted: 1
+  monos: 1
+  mono: 1
+  lstlisting: 1

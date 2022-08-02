@@ -1,0 +1,12 @@
+  <qemu:override>
+    <qemu:device alias="hostdev0">
+      <qemu:frontend>
+        <qemu:property name="ramfb" type="bool" value="true"/>
+        <qemu:property name="driver" type="string" value="vfio-pci-nohotplug"/>
+        <qemu:property name="x-igd-opregion" type="bool" value="true"/>
+        <qemu:property name="xres" type="unsigned" value="1920"/>
+        <qemu:property name="yres" type="unsigned" value="1080"/>
+        <qemu:property name="romfile" type="string" value="/home/yubo/config/virt/firm/vbios_gvt_uefi.rom"/>
+      </qemu:frontend>
+    </qemu:device>
+  </qemu:override>

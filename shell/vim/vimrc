@@ -1,0 +1,3 @@
+source ~/config/shell/vim/plugin.vim 
+source ~/config/shell/vim/custom.vim
+source ~/config/shell/vim/basic.vim

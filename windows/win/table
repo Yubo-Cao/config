@@ -1,0 +1,6 @@
+0 		    2048 		linear 	/dev/loop0	0
+2048 		999424 		linear 	/dev/sda1 	0
+1001472 	419430400 	zero
+420431872   32768       linear  /dev/sda4   0
+420464640 	419397632 	linear 	/dev/sda5 	0
+839862272 	160352944 	zero

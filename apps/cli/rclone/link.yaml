@@ -1,0 +1,4 @@
+- /etc/fuse.conf:
+  path: fuse.conf
+- /usr/lib/systemd/system/rclone.service:
+  path: rclone.service

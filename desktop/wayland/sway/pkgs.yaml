@@ -1,0 +1,11 @@
+- sway:
+    - sway
+    - swaybg
+    - swayidle
+    - swayidle
+- bar:
+    - waybar
+    - light
+- red:
+    - gammastep
+    - geoclue

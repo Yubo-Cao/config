@@ -1,0 +1,17 @@
+# disabled
+# Wayland
+# GTK run default by wayland.
+# GDK_BACKEND=wayland
+# QT has to be forced. When wayland is not available,
+# fall back to X11
+QT_QPA_PLATFORM="wayland;xcb"
+# Clutter
+CLUTTER_BACKEND=wayland
+# SDL2. Game may break, then x11
+SDL_VIDEODRIVER=wayland
+# Glew. yay -S glew-wayland
+# Winit run default by wayland. Ensure
+WINIT_UNIX_BACKEND=wayland
+# Electron does not have wayland pam_env. See electron-flags.conf
+# Firefox
+MOZ_ENABLE_WAYLAND=1
