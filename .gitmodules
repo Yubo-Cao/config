@@ -10,7 +10,7 @@
 	url = https://github.com/romkatv/powerlevel10k.git
 [submodule "windows/vmware/vmware-host-modules"]
 	path = windows/vmware/vmware-host-modules
-	url = https://github.com/mkubecek/vmware-host-modules.git
+	url = https://github.com/mkubecek/vmware-host-modules
 [submodule "shell/zsh/plugins/zsh-autosuggestions"]
 	path = shell/zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
