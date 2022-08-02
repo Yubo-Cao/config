@@ -1,0 +1,62 @@
+# Dotfiles
+
+## Introduction
+
+Welcome to my config files for raspberry pi 3b+ and Arch linux. 
+- I use my raspberry pi as a samba server as well as an adblocker based on dns spoofing.
+- I use Arch Linux on daily bases. However, there are something that I must use windows,
+  like `Adobe .*`, `WeChat`, and other proprietory softwares. So I am actually dual boot.
+
+## Content
+
+### Virtualization
+
+I have 3 different virtual machine configuration:
+    - bare QEMU (current in use & recommended)
+    - libvirtd based qemu
+    - and vmware based
+Since I am dual booted with windows and Arch, one should consider bare qemu which take
+advantage of that as a good option. Before you deploy that, please modify disk table 
+according to your machine with `sudo parted /dev/sda unit s print`. Then you may execute 
+`sudo init.sh` as well as `qemu.sh` to install and start your windows virtual machine
+
+### X & Wayland
+
+I use both X and wayland, because some application is just more stable on X compared to 
+Wayland (or only available, e.g., `xfreerdp`). However, one can disable or enable X or
+Wayland environment variable by just creating a `env` file that start with `# disabled`.
+
+I will try to make a better implementation of choice in `dotbot` as a plugin. For now,
+let's stick with this stupid `bash` script solution.
+
+### Fcitx5
+
+As everyone knows, typing CJK/Español/or any language that requires dead key(s) is very difficult
+in Linux. For example, my terminal kitty + vim won't work with this solution (without all 
+those environment variables). But know we can have all of those just by execute install. 
+I mention it here because I understand you may not need to type those weird characters at all, 
+so, you may wish to remove them!
+
+### Font
+
+- Fira Code 12px - 14px - 16px
+- Google Material Icon Font
+- Exhaustive list in provided at `desktop/theme/font/pkgs.yaml`
+
+### AUR helper
+
+- Make sure you have `yay` installed. Our script does not throw an error if failed to do so.
+- Implementation details is available at `plugin/package.py`. It has the following properties
+    - Concurrent
+    - Indempotent
+    - `pacman` and `yay` compatible
+- One may group packages with dict (as folders). This program always install all the leaf node
+  in the `pkg.yaml` file. One may specify backend and/or specify whether to install a batch of
+  programs at once. Just take a look at `package.py` and you will see how it works.
+
+### Future
+
+- We will move to `Ansible` eventually. This dot file manager grows in complexity, and would 
+  eventually become a click and configure a new Arch Distro stuff. That being said, this
+  Python script and Bash script solution works now, but eventually, growing bigger and bigger
+  that we must use other solutions.
