@@ -208,12 +208,15 @@ hide_edge_borders smart
 smart_gaps on
 gaps inner 5
 
-# Rofi
+# Calculator
 bindsym $mod+c exec $menu -show calc -modi calc -no-show-match -no-sort | wl-copy
+
+# Mako
+exec --no-startup-id mako
 
 # Screenshot
 # Pure Screen Shot
-bindsym ctrl+F1 exec grim -g "$(slurp)" - | wl-copy
+# bindsym ctrl+F1 exec grim -g "$(slurp)" - | wl-copy
 # Scan QR Code
 # bindsym ctrl+F2 exec grim -g "$(slurp)" - | zbarimg -q --noxml - | perl -pe 's/^.*?://g' | wl-copy
 # Format Code
@@ -223,11 +226,11 @@ bindsym $mod+z exec $menu -show run
 
 # flameshot
 
-# exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
-# exec hash dbus-update-activation-environment 2>/dev/null && \
-# dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
-# for_window [app_id="flameshot"] floating enable
-# bindsym ctrl+F1 exec flameshot gui
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && \
+dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+for_window [app_id="flameshot"] floating enable
+bindsym ctrl+F1 exec flameshot gui
 
 # HDMI
 set $laptop "Chimei Innolux Corporation 0x14D4 0x00000000"
@@ -239,15 +242,15 @@ output HDMI-A-2 pos 0 0
 # GeoClue for Gammastep
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
 
-# Yakuake
+# Dropdown Terminal
 set $title dropdown
 set $dropdown_term kitty -T $title
 exec $dropdown_term
 for_window [title="$title"] move scratchpad, resize set 1920 400, move absolute 0 0
 bindsym F12 [title="$title"] scratchpad show, move absolute 0 0
 
-# Edge
-bindsym $mod+p exec microsoft-edge-stable
+# Firefox
+bindsym $mod+p exec firefox 
 
 # Redshift
 exec gammastep
