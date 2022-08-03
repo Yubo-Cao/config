@@ -1,10 +1,9 @@
-# disabled
 # Wayland
 # GTK run default by wayland.
 # GDK_BACKEND=wayland
 # QT has to be forced. When wayland is not available,
 # fall back to X11
-QT_QPA_PLATFORM="wayland;xcb"
+QT_QPA_PLATFORM="wayland"
 # Clutter
 CLUTTER_BACKEND=wayland
 # SDL2. Game may break, then x11

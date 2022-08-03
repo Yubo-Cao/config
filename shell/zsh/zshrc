@@ -156,3 +156,4 @@ RAS_USER=yubo
 function ssh_ras(){
     ssh "$RAS_USER@$RAS_IP";
 }
+

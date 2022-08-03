@@ -1,8 +1,4 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
+
 
 ### Variables
 #
@@ -190,8 +186,8 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Waybar
-bar {
-    swaybar_command waybar
+bar { 
+    swaybar_command waybar 
 }
 
 # Fcitx
@@ -208,6 +204,9 @@ hide_edge_borders smart
 smart_gaps on
 gaps inner 5
 
+# DBus
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+
 # Calculator
 bindsym $mod+c exec $menu -show calc -modi calc -no-show-match -no-sort | wl-copy
 
@@ -215,22 +214,12 @@ bindsym $mod+c exec $menu -show calc -modi calc -no-show-match -no-sort | wl-cop
 exec --no-startup-id mako
 
 # Screenshot
-# Pure Screen Shot
-# bindsym ctrl+F1 exec grim -g "$(slurp)" - | wl-copy
+bindsym ctrl+F1 exec grim -g "$(slurp)" - | wl-copy
 # Scan QR Code
-# bindsym ctrl+F2 exec grim -g "$(slurp)" - | zbarimg -q --noxml - | perl -pe 's/^.*?://g' | wl-copy
+bindsym ctrl+F2 exec grim -g "$(slurp)" - | zbarimg -q --noxml - | perl -pe 's/^.*?://g' | wl-copy
 # Format Code
 bindsym ctrl+alt+f exec wl-paste | black - | wl-copy
-bindsym $mod+z exec $menu -show run
 # OCR
-
-# flameshot
-
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
-exec hash dbus-update-activation-environment 2>/dev/null && \
-dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
-for_window [app_id="flameshot"] floating enable
-bindsym ctrl+F1 exec flameshot gui
 
 # HDMI
 set $laptop "Chimei Innolux Corporation 0x14D4 0x00000000"
@@ -239,6 +228,9 @@ bindswitch --reload --locked lid:off output $laptop enable
 output eDP-1 pos 0 1080
 output HDMI-A-2 pos 0 0
 
+# run command
+bindsym $mod+z exec $menu -show run
+
 # GeoClue for Gammastep
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
 
@@ -246,8 +238,8 @@ exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
 set $title dropdown
 set $dropdown_term kitty -T $title
 exec $dropdown_term
-for_window [title="$title"] move scratchpad, resize set 1920 400, move absolute 0 0
-bindsym F12 [title="$title"] scratchpad show, move absolute 0 0
+for_window [title="$title"] move scratchpad, resize set 1900 400, move 0 px 0 px
+bindsym F12 [title="$title"] scratchpad show, move 0 px 0 px
 
 # Firefox
 bindsym $mod+p exec firefox 
