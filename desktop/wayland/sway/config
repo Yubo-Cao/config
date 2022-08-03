@@ -44,6 +44,12 @@ input "2321:21128:HTIX5288:00_0911:5288_Touchpad" {
     middle_emulation enabled
 }
 
+input "1:1:AT_Translated_Set_2_keyboard" {
+    repeat_rate 35
+    repeat_delay 190
+}
+
+
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
@@ -254,7 +260,7 @@ for_window [shell="xwayland"] title_format "[X] %title"
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # Wines
-for_window [class=".*photoshop\.exe.*"] fullscreen enable
+for_window [class=".*\.exe.*"] fullscreen enable
 
 # Saladict
 for_window [title="沙拉查词"] floating enable

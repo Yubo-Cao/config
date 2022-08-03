@@ -1,6 +1,8 @@
 GTK_IM_MODULE=fcitx
 QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
+SDL_IM_MODULE=fcitx # vendor modified SDL2
+GLFW_IM_MODULE=ibus # kitty
 
 LANG="zh_CN.UTF-8"
 LC_CTYPE="zh_CN.UTF-8"
