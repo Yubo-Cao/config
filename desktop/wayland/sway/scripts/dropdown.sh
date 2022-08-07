@@ -37,15 +37,26 @@ function extract_scratch() {
 
 function main() {
 	parse "$@"
+	$ACTION
+}
 
-	case $ACTION in
-	init) init ;;
-	toggle) toggle ;;
-	esac
+function usage() {
+	cat <<-END
+		Usage: $(basename $0) [-t program] [-i app_id] [-h] -a action
+			-t program: program to use for the action
+			-i app_id: app_id to use for the action
+			-a action: action to perform. choose from:
+				- init
+				- toggle
+				- destroy
+				- status
+				- usage
+			-h: show this help message
+	END
 }
 
 function parse() {
-	while getopts 't:i:a:' option "$@"; do
+	while getopts 't:i:a:h' option "$@"; do
 		case $option in
 		t)
 			PROG="$OPTARG"
@@ -56,17 +67,23 @@ function parse() {
 		a)
 			ACTION="$OPTARG"
 			case $ACTION in
-			init | toggle)
+			init | toggle | status | destroy | usage )
 				continue
 				;;
 			*)
 				warning "Invalid action $ACTION"
+				usage
 				exit 1
 				;;
 			esac
 			;;
+		h)
+			usage
+			exit 0
+			;;
 		?)
 			warning "Invalid option."
+			usage
 			exit 1
 			;;
 		esac
@@ -80,7 +97,7 @@ function parse() {
 
 function more_than_one() {
 	warning "More than one '$PROG' is found. Extras are killed."
-	get_windows | extract '[.[] | select(.app_id == $app_id)][1:] | .pid' | xargs kill '{}'
+	tree | extract_windows | extract '[.[] | select(.app_id == $app_id)][1:] | .[].pid' | xargs -I pid kill pid
 }
 
 function init() {
@@ -90,6 +107,10 @@ function init() {
 		;;
 	"uninitialized")
 		$PROG --class "$APP_ID" --instance-group "$APP_ID" --detach
+		until swaymsg -t subscribe '["window"]' | grep -q '"change": "new"'; do
+			sleep 0.1
+		done
+		toggle
 		;;
 	"off" | "on")
 		warning "'$PROG' already created. Nothing is done."
@@ -104,7 +125,7 @@ function status() {
 	if [ -z "$(pgrep "$PROG")" ] || [ "$ids_count" -eq 0 ]; then
 		echo "uninitialized"
 	elif [ "$ids_count" -eq 1 ]; then
-		if [ "$(tree | extract_scratch | extract_ids | jq 'length')" -eq 1 ]; then
+		if [ "$(tree | extract_scratch | extract_windows | extract_ids | jq 'length')" -eq 1 ]; then
 			echo "off"
 		else
 			echo "on"
@@ -115,20 +136,38 @@ function status() {
 }
 
 function toggle() {
-	local ids
-	local pid
-	ids="$(tree | extract_scratch | extract_windows | extract_ids)"
-
-	if [ "$ids" = '[]' ]; then
-		pid="$(tree | extract_windows | extract_ids | extract '.[].pid')"
-		swaymsg "[pid=$pid]" move window to scratchpad
-	else
-		pid="$(echo "$ids" | extract '.[].pid')"
-		swaymsg "[pid=$pid]" scratchpad show, \
+	case $(status) in
+	"multiple")
+		more_than_one
+		;;
+	"uninitialized")
+		warning "'$PROG' haven't been created."
+		init
+		toggle
+		;;
+	"on")
+		id="$(tree | extract_windows | extract_ids | extract '.[].id')"
+		swaymsg "[con_id=$id]" move window to scratchpad
+		;;
+	"off")
+		id="$(tree | extract_scratch | extract_windows | extract_ids | extract '.[].id')"
+		swaymsg "[con_id=$id]" scratchpad show, \
 			floating enable, \
-			move position 10 px 0 px, \
-			resize set width 1900 px height 400 px
-	fi
+			resize set width 1900 px height 400 px, \
+			move position 10 px 0 px
+		;;
+	esac
+}
+
+function destroy() {
+	case $(status) in
+	"uninitialized")
+		warning "'$PROG' haven't been created. Nothing is done."
+		;;
+	"on" | "off" | "multiple")
+		tree | extract_windows | extract_ids | extract '.[].pid' | xargs -I pid kill pid
+		;;
+	esac
 }
 
 main "$@"
