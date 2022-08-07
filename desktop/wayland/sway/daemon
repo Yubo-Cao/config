@@ -1,0 +1,2 @@
+# Multi-monitor support
+exec ~/config/desktop/wayland/sway/scripts/output.sh

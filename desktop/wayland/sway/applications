@@ -1,11 +1,16 @@
 # Terminal
 set $term kitty
-exec_always scripts/dropdown.sh -t "$term" -a init
-bindsym F12 exec scripts/dropdown.sh -t "$term" -a toggle
-bindsym $mod+Return $term
+set $toggler ~/config/desktop/wayland/sway/scripts/dropdown.sh
+exec_always $toggler -t "$term" -a init
+bindsym F12 exec $toggler -t "$term" -a toggle
+bindsym $mod+Return exec $term
 
 # Launcher
-set $menu scripts/helper.sh
+set $menu ~/config/desktop/wayland/sway/scripts/launcher.sh
 bindsym $mod+d exec $menu -show drun
 bindsym $mod+z exec $menu -show run
 bindsym $mod+c exec $menu -show calc -modi calc -no-show-match -no-sort | wl-copy
+
+# Grimshot
+bindsym ctrl+F1 exec grim -g "$(slurp)" - | wl-copy
+bindsym ctrl+F2 exec grim -g "$(slurp)" - | zbarimg -q --noxml - | perl -pe 's/^.*?://g' | wl-copy

@@ -6,7 +6,9 @@ set $down j
 set $up k
 set $right l
 
-include "common"
+include common
+include applications
+include daemon
 
 # Wall paper
 output * bg assets/wallpaper.jpg fill
@@ -19,7 +21,6 @@ bindsym $mod+Shift+e exec swaynag -t warning \
 # Swaylock after 5 minutes
 exec swayidle -w \
 	timeout 300 'swaylock'
-bindsym $mod+shift+l exec swaylock
 
 # Touch pad
 input "2321:21128:HTIX5288:00_0911:5288_Touchpad" {
@@ -38,6 +39,7 @@ input "1:1:AT_Translated_Set_2_keyboard" {
 # Waybar
 bar { 
     swaybar_command waybar 
+    mode hide
 }
 
 # Fcitx
@@ -60,20 +62,9 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 # Mako
 exec --no-startup-id mako
 
-# Screenshot
-bindsym ctrl+F1 exec grim -g "$(slurp)" - | wl-copy
-# Scan QR Code
-bindsym ctrl+F2 exec grim -g "$(slurp)" - | zbarimg -q --noxml - | perl -pe 's/^.*?://g' | wl-copy
 # Format Code
 bindsym ctrl+alt+f exec wl-paste | black - | wl-copy
 # OCR
-
-# HDMI
-set $laptop "Chimei Innolux Corporation 0x14D4 0x00000000"
-bindswitch --reload --locked lid:on output $laptop disable
-bindswitch --reload --locked lid:off output $laptop enable
-# output eDP-1 pos 0 1080
-# output HDMI-A-2 pos 0 0
 
 # GeoClue for Gammastep
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
