@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-set -e          # exit on error
-set -u          # undefined variable is error
-set -o pipefail # pipe is successsfully only if all commands inside are successful
+source common.sh
 
 PROG="kitty"
 APP_ID="dropdown"
@@ -13,12 +11,8 @@ function extract() {
 		"$@"
 }
 
-function warning() {
-	echo -e "\033[0;31m[ $(date '+%F %T') ]: $*\033[0m"
-}
-
 function tree() {
-	swaymsg -t get_tree
+	wm-ipc -t get_tree
 }
 
 function extract_windows() {
@@ -67,7 +61,7 @@ function parse() {
 		a)
 			ACTION="$OPTARG"
 			case $ACTION in
-			init | toggle | status | destroy | usage )
+			init | toggle | status | destroy | usage)
 				continue
 				;;
 			*)
@@ -107,7 +101,7 @@ function init() {
 		;;
 	"uninitialized")
 		$PROG --class "$APP_ID" --instance-group "$APP_ID" --detach
-		until swaymsg -t subscribe '["window"]' | grep -q '"change": "new"'; do
+		until wm-ipc -t subscribe '["window"]' | grep -q '"change": "new"'; do
 			sleep 0.1
 		done
 		toggle
@@ -147,13 +141,14 @@ function toggle() {
 		;;
 	"on")
 		id="$(tree | extract_windows | extract_ids | extract '.[].id')"
-		swaymsg "[con_id=$id]" move window to scratchpad
+		wm-ipc "[con_id=$id]" move window to scratchpad, \
+			floating enable, \
+			resize set width 1900 px height 400 px, \
+			border pixel 1
 		;;
 	"off")
 		id="$(tree | extract_scratch | extract_windows | extract_ids | extract '.[].id')"
-		swaymsg "[con_id=$id]" scratchpad show, \
-			floating enable, \
-			resize set width 1900 px height 400 px, \
+		wm-ipc "[con_id=$id]" scratchpad show, \
 			move position 10 px 0 px
 		;;
 	esac
