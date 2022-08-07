@@ -1,19 +1,12 @@
-
-
-### Variables
-#
-# Logo key. Use Mod1 for Alt.
+# MOD KEY
 set $mod Mod4
 # Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
-# Your preferred terminal emulator
-set $term kitty
-# Your preferred application launcher
-# Note: pass the final command to swaymsg so that the resulting window can be opened
-# on the original workspace that the command was run on.
+
+# Application Launcher
 set $menu /home/yubo/config/desktop/rofi/helper.sh
 
 ### Output configuration
@@ -45,8 +38,8 @@ input "2321:21128:HTIX5288:00_0911:5288_Touchpad" {
 }
 
 input "1:1:AT_Translated_Set_2_keyboard" {
-    repeat_rate 35
-    repeat_delay 190
+    repeat_rate 39
+    repeat_delay 400
 }
 
 
@@ -231,21 +224,14 @@ bindsym ctrl+alt+f exec wl-paste | black - | wl-copy
 set $laptop "Chimei Innolux Corporation 0x14D4 0x00000000"
 bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable
-output eDP-1 pos 0 1080
-output HDMI-A-2 pos 0 0
+# output eDP-1 pos 0 1080
+# output HDMI-A-2 pos 0 0
 
 # run command
 bindsym $mod+z exec $menu -show run
 
 # GeoClue for Gammastep
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
-
-# Dropdown Terminal
-set $title dropdown
-set $dropdown_term kitty -T $title
-exec $dropdown_term
-for_window [title="$title"] move scratchpad, resize set 1900 400, move 0 px 0 px
-bindsym F12 [title="$title"] scratchpad show, move 0 px 0 px
 
 # Firefox
 bindsym $mod+p exec firefox 
