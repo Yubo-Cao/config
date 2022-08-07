@@ -3,110 +3,132 @@ set -e          # exit on error
 set -u          # undefined variable is error
 set -o pipefail # pipe is successsfully only if all commands inside are successful
 
-TERM="kitty"
+PROG="kitty"
 APP_ID="dropdown"
 ACTION=""
 
 function extract() {
-  jq --arg app_id "$APP_ID" \
-    --arg term "$TERM" \
-    "$@"
+	jq --arg app_id "$APP_ID" \
+		--arg term "$PROG" \
+		"$@"
 }
 
 function warning() {
-  echo -e "\033[0;31m[ $(date '+%F %T') ]: $*\033[0m"
+	echo -e "\033[0;31m[ $(date '+%F %T') ]: $*\033[0m"
 }
 
 function tree() {
-  swaymsg -t get_tree
+	swaymsg -t get_tree
 }
 
 function extract_windows() {
-  extract '[ recurse(.["nodes", "floating_nodes"][])
+	extract '[ recurse(.["nodes", "floating_nodes"][])
 	| select((.nodes? | length == 0) and
     (.type? as $type | $type == "con" or $type == "floating_con")) ]'
 }
 
-function extract_dropdowns() {
-  extract '[ .[] | select(.app_id == $app_id) ]'
+function extract_ids() {
+	extract '[ .[] | select(.app_id == $app_id) ]'
 }
 
 function extract_scratch() {
-  extract 'recurse(.nodes[]) | select(.name == "__i3_scratch")'
+	extract 'recurse(.nodes[]) | select(.name == "__i3_scratch")'
 }
 
 function main() {
-  parse "$@"
+	parse "$@"
 
-  case $ACTION in
-  init) init ;;
-  toggle) toggle ;;
-  esac
+	case $ACTION in
+	init) init ;;
+	toggle) toggle ;;
+	esac
 }
 
 function parse() {
-  while getopts 't:i:a:' option "$@"; do
-    case $option in
-    t)
-      TERM="$OPTARG"
-      ;;
-    i)
-      APP_ID="$OPTARG"
-      ;;
-    a)
-      ACTION="$OPTARG"
-      case $ACTION in
-      init | toggle)
-        continue
-        ;;
-      *)
-        warning "Invalid action $ACTION"
-        exit 1
-        ;;
-      esac
-      ;;
-    ?)
-      warning "Invalid option."
-      exit 1
-      ;;
-    esac
-  done
+	while getopts 't:i:a:' option "$@"; do
+		case $option in
+		t)
+			PROG="$OPTARG"
+			;;
+		i)
+			APP_ID="$OPTARG"
+			;;
+		a)
+			ACTION="$OPTARG"
+			case $ACTION in
+			init | toggle)
+				continue
+				;;
+			*)
+				warning "Invalid action $ACTION"
+				exit 1
+				;;
+			esac
+			;;
+		?)
+			warning "Invalid option."
+			exit 1
+			;;
+		esac
+	done
 
-  if [ -z "$ACTION" ]; then
-    warning "You must specify an action"
-    exit 1
-  fi
+	if [ -z "$ACTION" ]; then
+		warning "You must specify an action"
+		exit 1
+	fi
+}
+
+function more_than_one() {
+	warning "More than one '$PROG' is found. Extras are killed."
+	get_windows | extract '[.[] | select(.app_id == $app_id)][1:] | .pid' | xargs kill '{}'
 }
 
 function init() {
-  local term_count
-  term_count="$(tree | extract_windows | extract_dropdowns | jq 'length')"
+	case $(status) in
+	"multiple")
+		more_than_one
+		;;
+	"uninitialized")
+		$PROG --class "$APP_ID" --instance-group "$APP_ID" --detach
+		;;
+	"off" | "on")
+		warning "'$PROG' already created. Nothing is done."
+		;;
+	esac
+}
 
-  if [ "$term_count" -eq 0 ]; then
-    $TERM --class "dropdown" --instance-group "dropdown" --detach
-  elif [ "$term_count" -eq 1 ]; then
-    warning "'$TERM' already created. Nothing is done."
-  elif [ "$term_count" -gt 1 ]; then
-    get_windows | extract '[.[] | select(.app_id == $app_id)][1:] | .pid' | xargs kill '{}'
-    warning "More than one dropdown '$TERM' is found. Extras are killed."
-  fi
+function status() {
+	local ids_count
+	ids_count="$(tree | extract_windows | extract_ids | jq 'length')"
+
+	if [ -z "$(pgrep "$PROG")" ] || [ "$ids_count" -eq 0 ]; then
+		echo "uninitialized"
+	elif [ "$ids_count" -eq 1 ]; then
+		if [ "$(tree | extract_scratch | extract_ids | jq 'length')" -eq 1 ]; then
+			echo "off"
+		else
+			echo "on"
+		fi
+	else
+		echo "multiple"
+	fi
 }
 
 function toggle() {
-  local dropdown
-  local pid
-  dropdown="$(tree | extract_scratch | extract_windows | extract_dropdowns)"
+	local ids
+	local pid
+	ids="$(tree | extract_scratch | extract_windows | extract_ids)"
 
-  if [ "$dropdown" = '[]' ]; then
-    pid="$(tree | extract_windows | extract_dropdowns | extract '.[].pid')"
-    swaymsg "[pid=$pid]" move window to scratchpad
-  else
-    pid="$(echo "$dropdown" | extract '.[].pid')"
-    swaymsg "[pid=$pid]" scratchpad show, \
-      floating enable, \
-      move position 10 px 0 px, \
-      resize set width 1900 px height 400 px
-  fi
+	if [ "$ids" = '[]' ]; then
+		pid="$(tree | extract_windows | extract_ids | extract '.[].pid')"
+		swaymsg "[pid=$pid]" move window to scratchpad
+	else
+		pid="$(echo "$ids" | extract '.[].pid')"
+		swaymsg "[pid=$pid]" scratchpad show, \
+			floating enable, \
+			move position 10 px 0 px, \
+			resize set width 1900 px height 400 px
+	fi
 }
 
 main "$@"
