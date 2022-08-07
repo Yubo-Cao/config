@@ -1,0 +1,1 @@
+/home/yubo/config/desktop/rofi/launcher.sh

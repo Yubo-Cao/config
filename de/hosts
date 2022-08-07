@@ -1,0 +1,7 @@
+[local]
+localhost
+
+[local:vars]
+ansible_connection=local
+asnible_user=yubo
+ansible_password=e*ecf51d20

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 set -e          # exit on error
 set -u          # undefined variable is error
 set -o pipefail # pipe is successsfully only if all commands inside are successful
@@ -43,8 +43,8 @@ function main() {
 function usage() {
 	cat <<-END
 		Usage: $(basename $0) [-t program] [-i app_id] [-h] -a action
-			-t program: program to use for the action
-			-i app_id: app_id to use for the action
+			-t program: program to use for the action. default 'kitty'
+			-i app_id: app_id to use for the action. default 'dropdown'
 			-a action: action to perform. choose from:
 				- init
 				- toggle

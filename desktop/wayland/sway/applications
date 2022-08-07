@@ -1,0 +1,11 @@
+# Terminal
+set $term kitty
+exec_always scripts/dropdown.sh -t "$term" -a init
+bindsym F12 exec scripts/dropdown.sh -t "$term" -a toggle
+bindsym $mod+Return $term
+
+# Launcher
+set $menu scripts/helper.sh
+bindsym $mod+d exec $menu -show drun
+bindsym $mod+z exec $menu -show run
+bindsym $mod+c exec $menu -show calc -modi calc -no-show-match -no-sort | wl-copy

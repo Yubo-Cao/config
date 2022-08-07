@@ -1,8 +1,0 @@
-# Terminal Emulator
-set $term kitty
-
-# Dropdown
-set $id "dropdown"
-exec_always $term --class "$id" --instance-group "$id"
-for_window [app_id="$id"] move position 0 px 0 px, move scratchpad, resize set 1900 400
-bindsym F12 [app_id="$id"] scratchpad show, move position 0 px 0 px
